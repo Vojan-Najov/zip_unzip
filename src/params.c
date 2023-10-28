@@ -59,7 +59,7 @@
 static int parse_options(int argc, char *argv[], size_t *size);
 
 static int parse_pathname(int index, char *argv[], \
-                          const char **src_pathname, const char **dst_pathname);
+                          char **src_pathname, char **dst_pathname);
 
 /*
 *  parse_params
@@ -169,14 +169,13 @@ static int parse_options(int argc, char *argv[], size_t *sizeptr) {
 *  Если массив аргументов на этом не закончился, сообщаем об ошибке пользователю.
 */
 static int parse_pathname(int index, char *argv[], \
-                          const char **src_pathname_ptr, \
-                          const char **dst_pathname_ptr)
+                          char **src_pathname_ptr, char **dst_pathname_ptr)
 {
 	/*
 	 * Если индекс указывает, на последний элемент массива аргументов,
 	 * значит пользователь не ввел путь до файла.
 	*/
-	if (argv[index] == NULL) {
+	if (argv[index] == NULL || argv[index][0] == '\0') {
 		fprintf(stderr, "%s: %s\n", argv[0], PATHNAME_ERROR_MSG);
 		return PARAMS_ERROR;
 	}
