@@ -18,11 +18,12 @@
 *   - src_pathname, путь до исходного файла (обязательный аргумент)
 *   - dst_pathname, путь до выходного файла (не обязательный аргумент, который будет 
 *     сгенерирован в случае отсутствия)
-*   - chunksize, размер чанка равный размеру, переданному через опцию s, и приведенному
-*     к байтам домножением на коэфициет, если задана опция m. Если опции не заданы, то
-*     размер чанка инициализируется значением по-умолчнию далее по выполнению программы.
-* При успешном завершении, на выходе структура типа params_t будет проинициализирована,
-* и в качестве статуса будет возвращен 0.
+*   - chunksize, размер чанка равный размеру, переданному через опцию s, и
+*     приведенному к байтам домножением на коэфициет, если задана опция m. Если опции
+*     не заданы, то размер чанка инициализируется значением по-умолчнию далее по 
+*     выполнению программы.
+* При успешном завершении, на выходе структура типа params_t будет проинициализирова-
+* на, и в качестве статуса будет возвращен 0.
 * В противном случае функция возвращает код ошибки, не равный нулю.
 */
 
@@ -79,16 +80,16 @@ static int parse_pathname(int index, char *argv[], \
 int parse_params(int argc, char *argv[], params_t *params) {
 	int index;
 	long int size = 0;
+	int err_status = PARAMS_NO_ERROR;
 
 	if ((index = parse_options(argc, argv, &params->chunksize)) < 0) {
 		return PARAMS_ERROR;
 	}
 
-	if (parse_pathname(index, argv, &params->src_pathname, &params->dst_pathname) < 0) {
-		return PARAMS_ERROR;
-	}
+	err_status = parse_pathname(index, argv, \
+                              &params->src_pathname, &params->dst_pathname);
 
-	return PARAMS_NO_ERROR;
+	return err_status;
 }
 
 /*

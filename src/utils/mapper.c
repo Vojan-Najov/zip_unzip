@@ -4,57 +4,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 #include "mapper.h"
-
-#ifndef MAPPING_FILE
-
-int init_mapper(mapper_t &mapper, const char *pathname, size_t chunksize)
-{
-	struct stat stat_buffer;
-	int err_status = MAPPER_NO_ERROR;
-
-	err_status = stat(pathname, &stat_buffer);
-	if (err_status) {
-		return MAPPER_STATFILE_ERROR;
-	}
-	if (stat_buffer.st_mode & S_IFMT != S_IFREG) {
-		return MAPPER_REGFILE_ERROR;
-	}
-	mapper->filesize = stat_buffer.st_size;
-
-	if (!chunksize) {
-		chunksize = DEFAULT_CHUNKSIZE;
-	}
-	mapper->chunksize = chunksize;
-
-	mapper->stream = fopen(pathname, "r");
-	if (NULL == mapper->stream) {
-		return MAPPER_OPENFILE_ERROR;
-	}
-
-	return MAPPER_NO_ERROR;
-}
-
-int close_mapper(mapper_t *mapper)
-{
-	if (fclose(mapper->stream)) {
-		return MAPPER_CLOSEFILE_ERROR;
-	}
-
-	return MAPPER_NO_ERROR;
-}
-
-int next_chunk(mapper_t *mapper)
-{
-	return mapper->filesize > mapper->offset;
-}
-
-int pop_chunk(mapper_t *mapper, chunk_t *chunk)
-{
-	size
-}
-
-#else /* MAPPING FILE */
 
 int init_mapper(mapper_t *mapper, const char *pathname, size_t chunksize)
 {
@@ -139,4 +91,3 @@ int put_chunk(chunk_t *chunk) {
 	return err_status;
 }
 
-#endif /* MAPPING_FILE */
