@@ -10,10 +10,12 @@
 
 typedef struct params {
 	size_t chunksize;
-	const char *src_pathname;
-	const char *dst_pathname;
+	char *src_pathname;
+	char *dst_pathname;
 } params_t;
 
 int parse_params(int argc, char *argv[], params_t *params);
+
+char *generate_zip_pathname(const char *src_pathname);
 
 #endif  /* ZIP_UNZIP_PARAMS_H_ */

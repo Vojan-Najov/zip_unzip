@@ -13,27 +13,10 @@
 
 #include <stddef.h>
 
-#ifndef MAPPING_FILES
-
-#include <stdio.h>
-
-#endif  /* MAPPING_FILE */
-
 typedef struct chunk {
 	char *memptr;
 	size_t size;
 } chunk_t;
-
-#ifndef MAPPING_FILE
-
-typedef struct mapper {
-	FILE *stream;
-	size_t filesize;
-	size_t chunksize;
-	size_t offset;
-} mapper_t;
-
-#else /* MAPPING_FILE */
 
 typedef struct mapper {
 	int fildes;
@@ -41,9 +24,6 @@ typedef struct mapper {
 	size_t chunksize;
 	size_t offset;
 } mapper_t;
-
-#endif /* MAPPING_FILE */
-
 
 int init_mapper(mapper_t *mapper, const char *pathname, size_t chunksize);
 
