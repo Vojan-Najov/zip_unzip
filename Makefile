@@ -39,10 +39,10 @@ ${OBJ_AUX_DIR}/%.o: ${SRC_AUX_DIR}/%.c | $(OBJ_AUX_DIR)
 	${CC} ${CFLAGS} -c $< -o $@ 
 
 ${OBJ_DIR}:
-	mkdir -p $@
+	@mkdir -p $@
 
 ${OBJ_AUX_DIR}: ${OBJ_DIR}
-	mkdir -p $@
+	@mkdir -p $@
 
 clean:
 	rm -rf ${OBJ_DIR}

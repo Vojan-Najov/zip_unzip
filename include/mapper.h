@@ -1,6 +1,10 @@
 #ifndef ZIP_UNZIP_MAPPER_H_
 #define ZIP_UNZIP_MAPPER_H_
 
+#include <stddef.h>
+
+#include "chunk.h"
+
 #define NEED_ALLIGN 1
 #define DEFAULT_CHUNKSIZE 4096
 
@@ -10,13 +14,6 @@
 #define MAPPER_OPENFILE_ERROR 3
 #define MAPPER_CLOSEFILE_ERROR 4
 #define MAPPER_MAP_ERROR 5
-
-#include <stddef.h>
-
-typedef struct chunk {
-	char *memptr;
-	size_t size;
-} chunk_t;
 
 typedef struct mapper {
 	int fildes;
