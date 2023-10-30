@@ -24,7 +24,7 @@ char *generate_dst_pathname(const char *src_pathname)
 		return NULL;
 	}
 
-	idx = (int) strlen(src_pathname);
+	idx = (int) strlen(src_pathname) - 1;
 	while (idx >= 0 && src_pathname[idx] != '/') {
 		--idx;
 	}
