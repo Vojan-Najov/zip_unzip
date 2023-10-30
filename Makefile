@@ -44,6 +44,12 @@ ${OBJ_DIR}:
 ${OBJ_AUX_DIR}: ${OBJ_DIR}
 	@mkdir -p $@
 
+zlib-1.3: zlib-1.3.tar.gz
+	tar -xvf $<
+	cd $@ && ./configure && make
+
 clean:
+	rm -rf zlib-1.3
 	rm -rf ${OBJ_DIR}
-	rm zip
+	rm -f zip
+	rm -f unzip
