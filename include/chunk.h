@@ -4,13 +4,8 @@
 #include <stddef.h>
 
 typedef struct chunk {
-	char *memptr;
+	unsigned char *ptr;
 	size_t size;
-	size_t capacity;
 } chunk_t;
-
-int allocate_chunk(chunk_t *chunk, size_t size);
-
-void free_chunk(chunk_t *chunk);
 
 #endif  /* ZIP_UNZIP_CHUNK_H_ */

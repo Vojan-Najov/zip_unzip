@@ -5,9 +5,6 @@
 
 #include "chunk.h"
 
-#define NEED_ALLIGN 1
-#define DEFAULT_CHUNKSIZE 4096
-
 #define MAPPER_NO_ERROR 0
 #define MAPPER_STATFILE_ERROR 1
 #define MAPPER_REGFILE_ERROR 2
@@ -22,7 +19,7 @@ typedef struct mapper {
 	size_t offset;
 } mapper_t;
 
-int init_mapper(mapper_t *mapper, const char *pathname, size_t chunksize);
+int init_mapper(mapper_t *mapper, const char *pathname);
 
 int close_mapper(mapper_t *mapper);
 

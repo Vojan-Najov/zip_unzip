@@ -33,8 +33,7 @@ echo:
 	@echo ${ZIP_SRC}
 	@echo ${ZIP_OBJ}
 
-#build: zlib-1.3 zip unzip
-build: zlib-1.3 zip 
+build: zlib-1.3 zip unzip
 
 zip: ${ZIP_OBJ}
 	${CC} -g $^ ${LIBS} -o $@
