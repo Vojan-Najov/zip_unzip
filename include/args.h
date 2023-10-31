@@ -24,6 +24,4 @@ typedef struct args {
 
 int parse_args(int argc, char *argv[], args_t * args);
 
-char *generate_dst_pathname(const char *src_pathname);
-
 #endif  /* ZIP_ARGS_H_ */
