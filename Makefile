@@ -63,5 +63,6 @@ clean:
 	rm -rf ${OBJ_DIR}
 	rm -f zip
 	rm -f unzip
+	rm -rf tests/samples
 
 .PHONY: build all test memory_test clean
