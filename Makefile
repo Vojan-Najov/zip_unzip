@@ -32,6 +32,9 @@ unzip: ${UNZIP_OBJ}
 test: build tests/test.sh
 	cd tests && bash test.sh
 
+fuzz: build tests/fuzz.sh
+	cd tests && bash fuzz.sh
+
 memory_test: zlib-1.3
 	$(CC) -fsanitize=address -fsanitize=leak -fsanitize=undefined \
 		-I$(INCLUDE_DIR) -Izlib-1.3 $(ZIP_SRC) -L zlib-1.3 -lz -o zip
