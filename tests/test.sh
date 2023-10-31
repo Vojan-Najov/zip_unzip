@@ -27,7 +27,7 @@ touch samples/empty.a
 cat ../src/zip/main.c >samples/tmp.txt
 
 > samples/bigtmp.txt
-for i in $(seq 1 50); do
+for i in $(seq 1 100); do
 	cat ../src/zip/* ../src/unzip/* ../include/*.h >>samples/bigtmp.txt
 	cat ../zlib-1.3/*.c ../zlib-1.3/*.c >>samples/bigtmp.txt
 done
