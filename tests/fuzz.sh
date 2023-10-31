@@ -302,3 +302,5 @@ cal >samples/tempfile
 	echo;
 }
 
+rm -f *.out *.zip
+
