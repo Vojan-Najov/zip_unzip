@@ -11,6 +11,7 @@
 #define MAPPER_OPENFILE_ERROR 3
 #define MAPPER_CLOSEFILE_ERROR 4
 #define MAPPER_MAP_ERROR 5
+#define MAPPER_EMPTYFILE_ERROR 6
 
 typedef struct mapper {
 	int fildes;

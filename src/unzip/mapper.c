@@ -50,6 +50,12 @@ int init_mapper(mapper_t *mapper, const char *pathname)
 	/* Получаем размер файла */
 	mapper->filesize = stat_buffer.st_size;
 
+	/* Проверка, что файл не пуст */
+	if (!mapper->filesize) {
+		fprintf(stderr, "%s: '%s': %s\n", "unzip", pathname, "empty file");
+		return MAPPER_EMPTYFILE_ERROR;
+	}
+
 	/* размер чанка быбран как 4 страницы */
 	mapper->chunksize = DEFAULT_NPAGE * getpagesize();
 	
