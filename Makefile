@@ -15,23 +15,11 @@ UNZIP_SRC = $(wildcard $(UNZIP_SRC_DIR)/*.c)
 UNZIP_OBJ = $(addprefix $(UNZIP_OBJ_DIR)/, $(notdir $(UNZIP_SRC:.c=.o)))
 
 CC = gcc
-CFLAGS = -std=c99 -D_GNU_SOURCE -Wall -Wextra -Werror -I${INCLUDE_DIR} -I${ZLIB_DIR}
+CFLAGS = -std=c99 -D_GNU_SOURCE -Wpedantic \
+					-Wall -Wextra -Werror -I${INCLUDE_DIR} -I${ZLIB_DIR}
 LIBS = -L${ZLIB_DIR} -lz
 
-#SRC_DIR = ./src
-#SRC_AUX_DIR = ./src/utils
-#OBJ_DIR = ./obj
-#OBJ_AUX_DIR = $(OBJ_DIR)/utils
-#SRC_AUX = $(wildcard $(SRC_DIR)/utils/*.c)
-#SRC_ZIP = ${SRC_DIR}/zip.c
-#SRC_UNZIP = ${SRC_DIR}/unzip.c
-#OBJ_AUX = $(addprefix $(OBJ_AUX_DIR)/, $(notdir $(SRC_AUX:.c=.o)))
-#OBJ_ZIP = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_ZIP:.c=.o)))
-#OBJ_UNZIP = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_UNZIP:.c=.o)))
-
-echo:
-	@echo ${ZIP_SRC}
-	@echo ${ZIP_OBJ}
+all: build test
 
 build: zlib-1.3 zip unzip
 
@@ -40,6 +28,17 @@ zip: ${ZIP_OBJ}
 
 unzip: ${UNZIP_OBJ}
 	${CC} -g $^ -o $@ ${LIBS}
+
+test: build tests/test.sh
+	cd tests && bash test.sh
+
+memory_test: zlib-1.3
+	$(CC) -fsanitize=address -fsanitize=leak -fsanitize=undefined \
+		-I$(INCLUDE_DIR) -Izlib-1.3 $(ZIP_SRC) -L zlib-1.3 -lz -o zip
+	$(CC) -fsanitize=address -fsanitize=leak -fsanitize=undefined \
+		-I$(INCLUDE_DIR) -Izlib-1.3 $(UNZIP_SRC) -L zlib-1.3 -lz -o unzip
+	cd tests && bash test.sh
+	
 
 $(ZIP_OBJ_DIR)/%.o: $(ZIP_SRC_DIR)/%.c | $(ZIP_OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -54,7 +53,6 @@ $(ZIP_OBJ_DIR):
 $(UNZIP_OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(UNZIP_OBJ_DIR)
-	
 
 zlib-1.3: zlib-1.3.tar.gz
 	tar -xvf $<
@@ -66,14 +64,4 @@ clean:
 	rm -f zip
 	rm -f unzip
 
-
-#${OBJ_DIR}/%.o: ${SRC_DIR}/%.c
-#	${CC} ${CFLAGS} -c $< -o $@ 
-#${OBJ_AUX_DIR}/%.o: ${SRC_AUX_DIR}/%.c | $(OBJ_AUX_DIR)
-#	${CC} ${CFLAGS} -c $< -o $@ 
-#${OBJ_DIR}:
-#	@mkdir -p $@
-#${OBJ_AUX_DIR}: ${OBJ_DIR}
-#	@mkdir -p $@
-
-.PHONY: build all test clean
+.PHONY: build all test memory_test clean
