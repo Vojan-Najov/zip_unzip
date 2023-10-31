@@ -40,8 +40,7 @@ memory_test: zlib-1.3
 		-I$(INCLUDE_DIR) -Izlib-1.3 $(ZIP_SRC) -L zlib-1.3 -lz -o zip
 	$(CC) -fsanitize=address -fsanitize=leak -fsanitize=undefined \
 		-I$(INCLUDE_DIR) -Izlib-1.3 $(UNZIP_SRC) -L zlib-1.3 -lz -o unzip
-	cd tests && bash test.sh
-	
+	cd tests && bash test.sh && bash fuzz.sh
 
 $(ZIP_OBJ_DIR)/%.o: $(ZIP_SRC_DIR)/%.c | $(ZIP_OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
