@@ -149,7 +149,7 @@ static int parse_options(int argc, char *argv[], size_t *sizeptr) {
 		return -1;
 	}
 
-	fprintf(stderr, "size = %zu\n", size * measure);
+	/* fprintf(stderr, "size = %zu\n", size * measure); */
 
 	*sizeptr = size * measure;
 

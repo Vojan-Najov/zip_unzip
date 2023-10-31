@@ -52,6 +52,7 @@ int zip_compress(FILE *in_stream, FILE *out_stream, size_t chunksize)
 			break;
 		}
 
+		/* Если файл закончился, то уявно указываем zlib, что это последний буфер. */
 		if (feof(in_stream)) {
 			flush = Z_FINISH;
 		}
@@ -77,8 +78,8 @@ int zip_compress(FILE *in_stream, FILE *out_stream, size_t chunksize)
 			err_status = write_out_stream(out_chunk, ncompressed, out_stream);
 			
 		} while (!stream.avail_out && err_status != EXIT_FAILURE);
-		/* пока не обработан весь вых. буфер z_stream, т.е. пока он полностью заполнен */
-		/* или не случилась ошибка записи */
+		/* пока не обработан весь вых. буфер z_stream, т.е. пока он хотябы 
+		 * частично заполнен, или не случилась ошибка записи */
 	}
 
 	/* Очищение ресурсов потока типа z_stream */
@@ -95,8 +96,8 @@ int zip_compress(FILE *in_stream, FILE *out_stream, size_t chunksize)
 }
 
 /*
-*  allocate_chunks
-*  Вспомогательная функция. Цель выделить динамическую память для
+* allocate_chunks
+* Вспомогательная функция. Цель выделить динамическую память для
 * входного и выходного буфера. В случае ошибки, в стандартный поток
 * ошибок выводится сообщение, а возвращаемое значение не равно 0.
 */ 
@@ -104,11 +105,10 @@ int zip_compress(FILE *in_stream, FILE *out_stream, size_t chunksize)
 static int allocate_chunks(Bytef **in_chunk_ptr, \
 														Bytef **out_chunk_ptr, size_t chunksize)
 {
-	fprintf(stderr, "%zu\n", chunksize);
 	*in_chunk_ptr = (Bytef *) malloc(sizeof(Bytef) * chunksize);
 	if (*in_chunk_ptr == NULL) {
 		*out_chunk_ptr = NULL;
-		fprintf(stderr, "1%s: %s: %s\n", "zip", "memory", strerror(errno));
+		fprintf(stderr, "%s: %s: %s\n", "zip", "memory", strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -116,12 +116,19 @@ static int allocate_chunks(Bytef **in_chunk_ptr, \
 	if (*out_chunk_ptr == NULL) {
 		free(*in_chunk_ptr);
 		*in_chunk_ptr = NULL;
-		fprintf(stderr, "2%s: %s: %s\n", "zip", "memory", strerror(errno));
+		fprintf(stderr, "%s: %s: %s\n", "zip", "memory", strerror(errno));
 		return EXIT_FAILURE;
 	}
 
 	return EXIT_SUCCESS;
 }
+
+/*
+*  write_out_stream
+*
+*  Функция записи в файл. Запись проходит в цикле, пока все nbytes байтов
+*  не будет записано файл, или случится ошибка записи.
+*/
 
 static int write_out_stream(const Bytef *buf, size_t nbytes, FILE *out_stream)
 {
